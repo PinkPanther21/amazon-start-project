@@ -8,7 +8,7 @@ hello();
 
 const today = dayjs();
 const deliveryDate = today.add(7, 'days');
-deliveryDate.format('dddd, MMMM D');
+console.log(deliveryDate.format('dddd, MMMM D'));
 
 let cartSummaryHTML = "";
 
@@ -25,14 +25,16 @@ cart.forEach((cartItem) => {
 
   let deliveryOption;
 
-  deliveryOptions.forEach((option) =>{
+  deliveryOptions.forEach((option) => {
     if(option.id === deliveryOptionId){
       deliveryOption = option;
     }
   });
   const today = dayjs();
-    const deliveryDate = today.add(deliveryOptions.deliveryDays, "days");
-    const dateString = today.format("dddd, MMMM D");
+    const deliveryDate = today.add(deliveryOption.deliveryDays, 'days');
+    const dateString = deliveryDate.format('dddd, MMMM D');
+
+
   cartSummaryHTML += `
     <div class="cart-item-container js-cart-item-container-${
       matchingProduct.id
@@ -81,22 +83,22 @@ cart.forEach((cartItem) => {
 });
 function deliveryOptionsHTML(matchingProduct, cartItem) {
   let html = '';
-  deliveryOptions.forEach((deliveryOptions) => {
+  deliveryOptions.forEach((deliveryOption) => {
     const today = dayjs();
-    const deliveryDate = today.add(deliveryOptions.deliveryDays, 'days');
+    const deliveryDate = today.add(deliveryOption.deliveryDays, 'days');
     const dateString = deliveryDate.format('dddd, MMMM D');
     const priceString =
-      deliveryOptions.priceCents 
+      deliveryOption.priceCents 
       === 0
-        ? "FREE"
-        : `$${formatCurrency(deliveryOptions.priceCents)} -`;
+        ? 'FREE'
+        : `$${formatCurrency(deliveryOption.priceCents)} -`;
 
-      const isChecked = deliveryOptions.id === cartItem.deliveryOptionId;
+      const isChecked = deliveryOption.id === cartItem.deliveryOptionId;
 
        html += `
    <div class="delivery-option js-delivery-option"
    data-product-id="${matchingProduct.id}"
-   data-delivery-option-id="${deliveryOptions.id}">
+   data-delivery-option-id="${deliveryOption.id}">
                   <input type="radio"
                   ${isChecked ? 'checked' : ''}
                     class="delivery-option-input"
